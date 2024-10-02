@@ -32,5 +32,19 @@ def submit():
 
     return jsonify({'message': 'Data saved successfully!'})
 
+@app.route('/data', methods=['GET'])
+def get_data():
+    # Define the path for the JSON file
+    json_file_path = 'data.json'
+
+    # Check if the file exists
+    if os.path.exists(json_file_path):
+        # If it exists, read the existing data
+        with open(json_file_path, 'r') as file:
+            existing_data = json.load(file)
+        return jsonify(existing_data)  # Return data as JSON response
+    else:
+        return jsonify([])  # Return an empty list if file does not exist
+
 if __name__ == '__main__':
     app.run(debug=True)
