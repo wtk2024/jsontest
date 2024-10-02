@@ -3,74 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Details Form</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body {
-            background: linear-gradient(to right, #ff7e5f, #feb47b);
-            color: white;
-        }
-        .form-container {
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        }
-    </style>
+    <title>Data Submission Form</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
 <body>
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8 form-container mt-5">
-                <h2 class="text-center">Submit Your Details</h2>
-                <form id="detailsForm">
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" class="form-control" id="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" class="form-control" id="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea class="form-control" id="message" rows="3" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block">Submit</button>
-                </form>
-                <div id="result" class="mt-3 text-center"></div>
+        <h1 class="title">Submit Your Data</h1>
+        <form id="dataForm">
+            <div class="field">
+                <label class="label">Name</label>
+                <div class="control">
+                    <input class="input" type="text" id="name" required>
+                </div>
             </div>
-        </div>
+            <div class="field">
+                <label class="label">Email</label>
+                <div class="control">
+                    <input class="input" type="email" id="email" required>
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <button class="button is-primary" type="submit">Submit</button>
+                </div>
+            </div>
+        </form>
+        <div id="responseMessage"></div>
     </div>
 
     <script>
-        document.getElementById('detailsForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+        document.getElementById('dataForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent form submission
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
-            const message = document.getElementById('message').value;
-
-            const data = {
-                name: name,
-                email: email,
-                message: message
-            };
 
             fetch('/submit', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify({ name, email })
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('result').innerText = data.message;
+                document.getElementById('responseMessage').innerText = data.message;
             })
-            .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('result').innerText = 'An error occurred.';
-            });
+            .catch(error => console.error('Error:', error));
         });
     </script>
 </body>
